@@ -47,7 +47,8 @@ endfunction
 
 function! db#adapter#sqlserver#interactive(url) abort
   let url = db#url#parse(a:url)
-  return ['sqlcmd', '-S', s:server(url)] +
+  " -I to enable quoted identifier to support this: select foo as "foo"
+  return ['sqlcmd', '-I', '-S', s:server(url)] +
         \ s:boolean_param_flag(url, 'encrypt', '-N') +
         \ s:boolean_param_flag(url, 'trustServerCertificate', '-C') +
         \ (has_key(url, 'user') ? [] : ['-E']) +
